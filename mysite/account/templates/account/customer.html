@@ -1,0 +1,129 @@
+{% extends "account/layout.html" %}
+
+{% block nav %}
+          <ul class="nav navbar-nav">
+            <li><a href="/account/billing">报价单</a></li>
+            {% if user in operators %}
+            <li class="active"><a href="/account/customer">客户信息</a></li>
+            {% endif %}
+            <li><a href="/admin">管理</a></li>
+            <li><a href="/logout">退出</a></li>
+          </ul>
+{% endblock %}
+
+{% block content %}
+    <div class="container theme-showcase" role="main"> 
+        <div class="jumbotron">
+            <h2>添加客户</h2>
+            <form method="post" action="{% url 'add_customer' %}">
+            {% csrf_token %}
+            <div class="input-group">
+                <span class="input-group-addon label-info">公司名称</span>
+                <input type="text" class="form-control" placeholder="公司名称" name="name" autofocus required />
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">公司税号</span>
+                <input type="text" class="form-control" placeholder="税号" name="tax_number" />
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon label-info">公司地址</span>
+                <input type="text" class="form-control" placeholder="公司的详细地址" name="address" required />
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">银行名称</span>
+                <input type="text" class="form-control" placeholder="开户行名称" name="bank" />
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">银行账号</span>
+                <input type="text" class="form-control" placeholder="账号" name="account" />
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon label-info">联系人名</span>
+                <input type="text" class="form-control" placeholder="联系人姓名" name="contact" required />
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon label-info">电话号码</span>
+                <input type="text" class="form-control" placeholder="联系人电话" name="telephone" required />
+            </div>
+            <button class="btn btn-lg btn-danger btn-block" type="submit">添加</button>
+            </form>
+            
+            <h2>客户查询</h2>
+            <form method="get" action="{% url 'customer' %}">
+            <div class="input-group">
+                <span class="input-group-addon">公司名称</span>
+                <input type="text" class="form-control" placeholder="公司名称" name="name" value="{{ cleanData.name }}" autofocus />
+                </input>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">联系人名</span>
+                <input type="text" class="form-control" placeholder="联系人姓名" value="{{ cleanData.contact }}" name="contact" />
+            </div>
+            <button class="btn btn-lg btn-info btn-block" type="submit">查询</button>
+            </form>
+        </div> 
+        
+        {% if paginator.num_pages > 1 %}
+        <p>
+        {% for i in pageList %}
+            {% if i == '...' %}
+                <span>{{ i }}</span>
+            {% else %}
+                {% if i == page %}
+                    <a href="{{ i }}{{ queryString }}" class="btn btn-lg btn-primary">{{ i }}</a>
+                {% else %}
+                    <a href="{{ i }}{{ queryString }}" class="btn btn-lg btn-default">{{ i }}</a>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        </p>
+        {% endif %}
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>名称</th>
+                    <th>税号</th>
+                    <th>地址</th>
+                    <th>开户行</th>
+                    <th>账号</th>
+                    <th>联系人</th>
+                    <th>电话</th>
+                    <th>登录用户</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in company_list %}
+                <tr>
+                    <td>{{ forloop.counter | add:offset }}</td>
+                    <td>{{ i.name }}</td>
+                    <td>{{ i.taxNumber }}</td>
+                    <td>{{ i.address }}</td>
+                    <td>{{ i.bank }}</td>
+                    <td>{{ i.bankAccount }}</td>
+                    <td>{{ i.contact }}</td>
+                    <td>{{ i.telephone }}</td>
+                    <td>{{ i.username }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        {% if paginator.num_pages > 1 %}
+        <p>
+        {% for i in pageList %}
+            {% if i == '...' %}
+                <span>{{ i }}</span>
+            {% else %}
+                {% if i == page %}
+                    <a href="{{ i }}{{ queryString }}" class="btn btn-lg btn-primary">{{ i }}</a>
+                {% else %}
+                    <a href="{{ i }}{{ queryString }}" class="btn btn-lg btn-default">{{ i }}</a>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        </p>
+        {% endif %}
+    </div> <!-- /container -->
+{% endblock %}

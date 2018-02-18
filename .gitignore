@@ -3,6 +3,20 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+.DS_Store
+.project
+.pydevproject
+.settings
+env
+mysite/static
+db.sqlite3
+fabricrc
+log
+putdir
+putdir.tgz
+mysite/account/migrations/*.py
+mysite/demo-*.sqlite3
+
 # User-specific files
 *.suo
 *.user

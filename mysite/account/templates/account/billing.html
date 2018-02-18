@@ -1,0 +1,223 @@
+{% extends "account/layout.html" %}
+
+{% block content %}
+    <div class="container theme-showcase" role="main">         
+        <div class="jumbotron">
+            {% if user in operators %}
+            <h2>添加报价单</h2>
+            <form method="post" action="{% url 'add_billing' %}">
+            {% csrf_token %}
+            <div class="input-group">
+                <span class="input-group-addon label-info">公司名称</span>
+                <select name="company" class="form-control" required>
+                    {% for i in company_name_list %}
+                    <option value="{{ i }}">{{ i }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon label-info">订单类型</span>
+                <select name="type" class="form-control" required>
+                    {% for i in type_list %}
+                    <option value="{{ i }}">{{ i }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon label-info">制作项目</span>
+                <input type="text" class="form-control" placeholder="制作项目描述" name="content" required />
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">制作材料</span>
+                <select name="material" class="form-control" >
+                    {% for i in material_name_list %}
+                    <option value="{{ i }}">{{ i }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">材料高度</span>
+                <input type="text" class="form-control" placeholder="材料高度（设计类型不用填），3.2，默认是1" name="sizeHeight" />
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">材料宽度</span>
+                <input type="text" class="form-control" placeholder="材料宽度（设计类型不用填），2，默认是1" name="sizeWidth" />
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">计量单价</span>
+                <input type="text" class="form-control" placeholder="计量单价（制作类型不用填），34.5" name="price" />
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon label-info">订单数量</span>
+                <input type="text" class="form-control" placeholder="订单数量，3，默认是1" name="count" required />
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon label-info">订单税率</span>
+                <select class="form-control" name="taxPercent" required >
+                    {% for i in taxPercent_list %}
+                    <option value="{{ i }}">{{ i }} %</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button class="btn btn-lg btn-danger btn-block" type="submit">添加</button>
+            </form>
+            {% endif %}
+            
+            <h2>报价单查询</h2>
+            <form method="get" action="{% url 'billing' %}">
+            {% if user in operators %}
+            <div class="input-group">
+                <span class="input-group-addon">公司名称</span>
+                <input type="text" class="form-control" placeholder="公司名称" name="company" value="{{ cleanData.company }}" autofocus />
+                </input>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">登记人员</span>
+                <select name="author" class="form-control" >
+                    <option value="">-</option>
+                    {% for i in operators %}
+                    <option value="{{ i.username }}"
+                        {% if i.username == cleanData.author %} 
+                        selected="selected"
+                        {% endif %}
+                    >{{ i }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% endif %}
+            <div class="input-group">
+                <span class="input-group-addon">内容包含</span>
+                <input type="text" class="form-control" placeholder="内容" value="{{ cleanData.content }}" name="content" />
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">已结清</span>
+                <input type="checkbox" name="checkout" {% if cleanData.checkout == "on" %}checked="checked"{% endif %} />
+                <span class="input-group-addon">未结清</span>
+                <input type="checkbox" name="non_checkout" {% if cleanData.non_checkout == "on" %}checked="checked"{% endif %} />
+            </div>
+            <p>
+                <button class="btn btn-lg btn-primary" type="submit" name="month" value="1">单月</button>
+                <button class="btn btn-lg btn-success" type="submit" name="month" value="3">季度</button>
+                <button class="btn btn-lg btn-info" type="submit" name="month" value="12">年度</button>
+                <button class="btn btn-lg btn-warning" type="submit" name="month" value="-1">所有</button>
+            </p>
+            </form>
+        </div> 
+        
+        <p>
+        <span class="btn btn-lg btn-danger">
+            {% if monthNum == 1 %}
+            单月
+            {% elif monthNum == 3 %}
+            季度
+            {% elif monthNum == 12 %}
+            年度
+            {% elif monthNum < 0 %}
+            所有
+            {% else %}
+            前 {{ monthNum }} 个月
+            {% endif %}
+        </span>
+        <span> : </span>
+        {% if paginator.num_pages > 1 %}
+        {% for i in pageList %}
+            {% if i == '...' %}
+                <span>{{ i }}</span>
+            {% else %}
+                {% if i == page %}
+                    <a href="{{ i }}{{ queryString }}" class="btn btn-lg btn-primary">{{ i }}</a>
+                {% else %}
+                    <a href="{{ i }}{{ queryString }}" class="btn btn-lg btn-default">{{ i }}</a>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        {% endif %}
+        
+        <form method="post" action="{% url 'makexlsx' %}">
+        {% csrf_token %}
+            <span class="btn btn-lg btn-primary"> 含税总价: {{ TotalTax }} </span>
+            {% for k,v in cleanData.items %}
+            <input type="text" class="form-control" value="{{ v }}" name="{{ k }}" style="display:none"/>
+            {% endfor %}
+            <input type="text" class="form-control" value="{{ page }}" name="page" style="display:none"/>
+            <button class="btn btn-lg btn-info" type="submit" > 保存为Excel </button>
+        </form>
+        </p>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>登记人</th>
+                    <th>日期</th>
+                    {% if user in operators %}
+                    <th>公司</th>
+                    {% endif %}
+                    <th>类型</th>
+                    <th>内容</th>
+                    <th>材料(价格*高*宽)</th>
+                    <th>单价</th>
+                    <th>数量</th>
+                    <th>税率</th>
+                    <th>含税价</th>
+                    <th>结算</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in order_list %}
+                <tr>
+                    <td>{{ forloop.counter | add:offset }}</td>
+                    <td>{{ i.author }}</td>
+                    <td>{{ i.date | date:"Y-m-d" }}</td>
+                    {% if user in operators %}
+                    <td>{{ i.company.name }}</td>
+                    {% endif %}
+                    <td>
+                    {% if i.type != 'Manufacture' %}
+                    {{ i.type }}
+                    {% else %}
+                    制作
+                    {% endif %}
+                    </td>
+                    <td>{{ i.content | truncatechars:9 }}</td>
+                    <td>
+                    {% if i.type == 'Manufacture' %}
+                        {{ i.material }} ( {{ i.priceMaterial }} * {{ i.sizeHeight }} * {{ i.sizeWidth }} )
+                    {% else %}
+                        -
+                    {% endif %}
+                    </td>
+                    <td>{{ i.price }}</td>
+                    <td>{{ i.quantity }}</td>
+                    <td>{{ i.taxPercent }} %</td>
+                    <td>{{ i.priceIncludeTax }}</td>
+                    <td>
+                    {% if i.checkout %}
+                    已完成
+                    {% else %}
+                    未结算
+                    {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        {% if paginator.num_pages > 1 %}
+        <p>
+        {% for i in pageList %}
+            {% if i == '...' %}
+                <span>{{ i }}</span>
+            {% else %}
+                {% if i == page %}
+                    <a href="{{ i }}{{ queryString }}" class="btn btn-lg btn-primary">{{ i }}</a>
+                {% else %}
+                    <a href="{{ i }}{{ queryString }}" class="btn btn-lg btn-default">{{ i }}</a>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        </p>
+        {% endif %}
+        
+    </div> <!-- /container -->
+{% endblock %}

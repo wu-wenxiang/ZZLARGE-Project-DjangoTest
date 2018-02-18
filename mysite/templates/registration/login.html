@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <!-- Custom styles for this template -->
+    <link href="/static/login/css/signin.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+<form class="form-signin" method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    <div class="form-signin-heading">
+        {% if form.errors %}
+        <p>Your username and password didn't match. Please try again.</p>
+        {% endif %}
+        
+        {% if next %}
+            {% if user.is_authenticated %}
+            <p>Your account doesn't have access to this page. To proceed,
+            please login with an account that has access.</p>
+            {% else %}
+            <p>Please login to see this page.</p>
+            {% endif %}
+        {% endif %}
+    </div>
+    
+    <label for="id_username" class="sr-only">Username</label>
+    <input type="text" id="id_username" class="form-control" placeholder="Username" name="username" autofocus required />
+    <label for="id_password" class="sr-only">Password</label>
+    <input type="password" id="id_password" name="password" required class="form-control" placeholder="Password" />
+    
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" value="remember-me"> Remember me </input>
+        </label>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+</form>
+</div> <!-- /container -->
+
+{% endblock %}
