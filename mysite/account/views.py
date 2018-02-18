@@ -105,7 +105,7 @@ def billing(request, page):
     
     orders, monthNum = _filterOrder(request, cleanData)
     
-    TotalTax = sum(orders.values_list('priceIncludeTax', flat=True))
+    TotalTax = round(sum(orders.values_list('priceIncludeTax', flat=True)), 2)
     orders = orders.order_by('-date', '-id')
     
     paginator = Paginator(orders, 25)
