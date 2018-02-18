@@ -2,7 +2,7 @@ from settings import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['gaoyumedia.net', 'www.gaoyumedia.net']
+ALLOWED_HOSTS = ['*']
 
 DATABASES = {
     'default': {

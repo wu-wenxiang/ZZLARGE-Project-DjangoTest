@@ -1,6 +1,6 @@
 gevent
 gunicorn
-fabric
+fabric3
 markdown2
 pymysql
 django==1.11.5
