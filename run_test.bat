@@ -40,8 +40,8 @@ if not exist env (
   virtualenv env
 )
 call env\Scripts\activate
-call pip install -r test-requirements.txt
 call pip install -r requirements.txt
+call pip install -r test-requirements.txt
 exit /b
 
 PAUSE

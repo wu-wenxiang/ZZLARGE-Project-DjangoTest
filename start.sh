@@ -17,7 +17,7 @@ function build_venv {
     fi
     . env/bin/activate
 
-    pip install -r test-requirements.txt
+    pip install -r requirements.txt
 }
 
 function rebuild_db {

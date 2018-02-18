@@ -1,3 +1,5 @@
+-i https://pypi.douban.com/simple/ 
+
 gevent
 gunicorn
 markdown2
