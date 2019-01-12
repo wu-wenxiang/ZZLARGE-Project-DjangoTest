@@ -228,12 +228,12 @@ def convertxlsx(order_list, filePath):
 
         ids = [i.id for i in order_list ]
         authors = [i.author.username for i in order_list ]
-        dates = [str(i.date).decode('UTF-8') for i in order_list]
+        dates = [str(i.date) for i in order_list]
         names = [i.company.name for i in order_list]    
         types = [u'制作' if i.type == 'Manufacture' else i.type for i in order_list ]
         contents = [i.content for i in order_list ]
         materials = ['-' if i.type != 'Manufacture' else \
-                     str(i.material).decode('UTF-8') + ' (' +str(i.priceMaterial) + \
+                     str(i.material) + ' (' +str(i.priceMaterial) + \
                      ' * '+str(i.sizeHeight) + ' * '+str(i.sizeWidth) + ')'  for i in order_list ]            
         prices = [i.price for i in order_list ]
         quantitys = [i.quantity for i in order_list ]
@@ -274,7 +274,7 @@ def makexlsx(request):
     order_list = orders.order_by('-date') 
 
     def file_iterator(file_name, chunk_size=512):
-        with open(file_name) as f:
+        with open(file_name, 'rb') as f:
             while True:
                 c = f.read(chunk_size)
                 if c:
