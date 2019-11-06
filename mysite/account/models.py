@@ -15,7 +15,7 @@ class Company(models.Model):
     contact = models.CharField(max_length=200)
     telephone = models.CharField(max_length=200)
     username = models.ForeignKey(User, on_delete=models.PROTECT)
-    
+
     def __unicode__(self):
         return self.name
 
@@ -23,7 +23,7 @@ class Company(models.Model):
 class Material(models.Model):
     name = models.CharField(max_length=200, unique=True)
     price = models.FloatField()
-    
+
     def __unicode__(self):
         return self.name
 
@@ -57,17 +57,17 @@ class Order(models.Model):
     checkout = models.BooleanField(default=False)
     author = models.ForeignKey(User, on_delete=models.PROTECT, null=True,
                                blank=True)
-    
+
     def _autoFill(self):
         if self.type == 'Manufacture':
             self.priceMaterial = round(self.material.price, 2)
             self.price = round(self.sizeHeight * self.sizeWidth * self.priceMaterial, 2)
         self.priceTotal = round(self.price * self.quantity, 2)
         self.priceIncludeTax = round(self.priceTotal * 100 / (100 - self.taxPercent), 2)
-    
+
     def __unicode__(self):
         content = self.content
         if len(content) > 10:
             content = content[:10]
-        
+
         return '%s-(%s)' % (self.company, content)
