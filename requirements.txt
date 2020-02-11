@@ -2,7 +2,7 @@ gevent
 gunicorn
 markdown2
 pymysql
-django==1.11.23
+django==1.11.28
 djangorestframework
 markdown 
 django-filter
