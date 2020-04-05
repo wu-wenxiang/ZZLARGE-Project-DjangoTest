@@ -17,6 +17,7 @@ putdir.tgz
 mysite/account/migrations/*.py
 mysite/demo-*.sqlite3
 mysite/production.sqlite3
+.vscode
 
 # User-specific files
 *.suo
