@@ -44,7 +44,7 @@ call pip install -r requirements.txt
 exit /b
 
 :launch_webapp
-del "%BASE_DIR%mysite\db.sqlite3"
+del "%BASE_DIR%mysite\data\db.sqlite3"
 del "%BASE_DIR%mysite\account\migrations\0*"
 call python "%BASE_DIR%mysite\manage.py" "makemigrations" "account"
 call python "%BASE_DIR%mysite\manage.py" "migrate"

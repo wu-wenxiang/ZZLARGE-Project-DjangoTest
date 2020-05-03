@@ -1,0 +1,5 @@
+- hosts: webserver
+  become: yes
+  roles:
+    - init01_pre_install
+    - init02_config_webserver

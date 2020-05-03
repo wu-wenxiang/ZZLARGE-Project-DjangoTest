@@ -22,7 +22,7 @@ function build_venv {
 
 function rebuild_db {
 	logging "Clean"
-	rm -rf "${BASE_DIR}/mysite/db.sqlite3"
+	rm -rf "${BASE_DIR}/mysite/data/db.sqlite3"
 	rm -rf "${BASE_DIR}/mysite/account/migrations/0*"
 	ls "${BASE_DIR}/mysite/account/migrations/"
 	logging "migrate"

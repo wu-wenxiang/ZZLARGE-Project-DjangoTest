@@ -1,0 +1,59 @@
+- name: Install dependency packages
+  apt:
+    name:
+      # - nginx
+      # - supervisor
+      - docker.io
+    state: present
+
+- name: Make sure docker is running
+  systemd:
+    state: started
+    name: docker
+
+- name: Make sure docker is enabled
+  systemd:
+    name: docker
+    enabled: yes
+
+- name: Install pip depedences
+  pip:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - docker
+
+- name: Pull docker images {{ image_name }}:{{ image_version | default('latest') }}
+  docker_image:
+    state: present
+    force_source: yes
+    source: pull
+    name: "{{ image_name }}"
+    tag: "{{ image_version | default('latest') }}"
+
+- name: Push DB file if not exist
+  copy:
+    src: "{{ data_external_dir }}"
+    dest: "{{ data_hostpath }}"
+    force: "{{ update_data | default('no') }}"
+
+- name: "Stop current container {{ container_name }}"
+  docker_container:
+    name: "{{ container_name }}"
+    state: absent
+
+- name: "Container present {{ container_name }}"
+  docker_container:
+    name: "{{ container_name }}"
+    state: started
+    auto_remove: yes
+    image: "{{ image_name }}:{{ image_version | default('latest') }}"
+    ports:
+      - "{{ host_port | default('80') }}:{{ container_port | default('80') }}"
+    mounts:
+      - type: bind
+        source: "{{ data_hostpath }}"
+        target: "{{ data_containerpath }}"
+    env:
+        DB_GIT_URL: "{{ db_git_url }}"
+        DB_SECRET: "{{ db_secret }}"

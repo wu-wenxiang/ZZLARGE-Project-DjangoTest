@@ -1,0 +1,14 @@
+[all:vars]
+image_name="99cloud/origin-license-web-console"
+# image_version="latest"
+data_external_dir="/Users/wuwenxiang/local/github-99cloud/origin-license-web-console/mysite/data/"
+data_hostpath="/bastion-data/data/"
+# update_data=no
+data_containerpath="/home/www/caaslicense/src/mysite/data/"
+# container_port="80"
+# host_port="80"
+db_git_url="https://gitlab.trystack.cn/dbbackup"
+db_secret="123456"
+
+[webserver]
+alibastion

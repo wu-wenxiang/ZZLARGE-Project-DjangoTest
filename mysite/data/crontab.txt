@@ -1,0 +1,1 @@
+0 */1 * * * /bin/bash /home/www/mysite/src/mysite/data/backupdb.sh >> /home/www/mysite/src/mysite/data/cron.log 2>&1

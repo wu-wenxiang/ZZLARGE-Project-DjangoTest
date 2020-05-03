@@ -4,7 +4,6 @@ Created on 2016-01-17
 @author: Wu Wenxiang (wuwenxiang.sh@gmail.com)
 '''
 
-import hashlib
 import logging
 import os
 import shutil
@@ -15,7 +14,7 @@ import sys
 BASE_DIR = os.path.dirname(__file__)
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("manage.py")
-global app
+
 
 def showUsage():
     print("""Usage:
@@ -27,35 +26,42 @@ def showUsage():
     """)
     sys.exit()
 
+
 def opt_syncdb():
-#     src = os.path.join(BASE_DIR, 'mysite', 'demo.sqlite3')
-#     dst = os.path.join(BASE_DIR, 'mysite', 'db.sqlite3')
-#     shutil.rmtree(dst, ignore_errors=True)
-#     shutil.copy(src, dst)
+    # src = os.path.join(BASE_DIR, 'mysite', 'data', 'demo.sqlite3')
+    # dst = os.path.join(BASE_DIR, 'mysite', 'data', 'db.sqlite3')
+    # shutil.rmtree(dst, ignore_errors=True)
+    # shutil.copy(src, dst)
     pass
+
 
 def opt_init():
     pass
+
 
 def opt_clean():
     ENV_DIR = "env"
     if os.path.isdir(ENV_DIR):
         shutil.rmtree(ENV_DIR)
 
+
 def opt_test():
     pass
+
 
 def opt_prepare():
     _assert_cmd_exist("pip")
     os.system("pip install virtualenv")
-    
+
     opt_syncdb()
     opt_init()
-    
+
     opt_prepare_theme()
+
 
 def opt_prepare_theme():
     pass
+
 
 def _assert_cmd_exist(cmd):
     try:
@@ -64,6 +70,7 @@ def _assert_cmd_exist(cmd):
         log.warning("{}->{}".format(type(e), e.message))
         log.error("Command '{}' not exist!".format(cmd))
         sys.exit()
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:

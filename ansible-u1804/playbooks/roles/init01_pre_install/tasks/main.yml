@@ -1,0 +1,44 @@
+- name: apt-get update
+  apt:
+    update_cache: yes
+
+- name: Upgrade all packages to the latest version
+  apt:
+    name: "*"
+    state: latest
+    force_apt_get: True
+
+- name: Install dependency packages
+  apt:
+    name:
+      - git
+      - python-pip
+      - vim
+      - telnet
+    state: present
+
+- name: Update pip
+  shell: "pip install --upgrade pip"
+
+- name: "Push ~/.gitconfig file"
+  template:
+    src: gitconfig
+    dest: "~/.gitconfig"
+    mode: "0644"
+  become: False
+
+- name: "Config sshd"
+  lineinfile:
+    path: "/etc/ssh/sshd_config"
+    state: present
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  loop:
+    - {regexp: '^\s*ClientAliveInterval\s+', line: 'ClientAliveInterval 120'}
+    - {regexp: '^\s*ClientAliveCountMax\s+', line: 'ClientAliveCountMax 720'}
+
+- name: "Restart sshd"
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: sshd
