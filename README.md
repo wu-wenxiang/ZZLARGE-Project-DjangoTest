@@ -1,13 +1,13 @@
 # Python Django Test
 
-## 本地运行代码
+## 1. 本地运行代码
 
 - Python3.5+
 - `.\test.sh`
 - `.\start.sh`
 - [一键部署：Ubuntu 1604](https://github.com/wu-wenxiang/Project-Python-Webdev/tree/master/u1604-fabric)
 
-## 制作 Docker 镜像
+## 2. 制作 Docker 镜像
 
 1. 确认本地 Docker Daemon 正常运行
 
@@ -49,7 +49,7 @@
 	docker push registry.cn-shanghai.aliyuncs.com/99cloud-sh/django:1.11.29
 	```
 
-## 部署到远端站点
+## 3. 部署到远端站点
 
 1. 配置 ~/.ssh/config 文件，HostName 可以直接写 IP 地址，IdentityFile 是密钥文件，可以用 ssh-keygen 生成，然后通过 ssh-copy-id 拷贝到远端机器上取。
 
@@ -100,3 +100,9 @@
 	```
 
 1. 执行完毕后，可以通过浏览器访问远程机器
+
+## 4. 如何一个 VM 托管多个站点？
+
+前面加一个 Nginx 做统一的反向代理，用 Ansible 推送配置。
+
+![](doc/image/arch.png)
