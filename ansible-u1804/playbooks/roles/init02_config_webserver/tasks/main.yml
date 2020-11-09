@@ -46,7 +46,7 @@
   docker_container:
     name: "{{ container_name }}"
     state: started
-    auto_remove: yes
+    restart_policy: always
     image: "{{ image_name }}:{{ image_version | default('latest') }}"
     ports:
       - "{{ host_port | default('80') }}:{{ container_port | default('80') }}"
