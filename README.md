@@ -49,7 +49,7 @@
 
 	```bash
 	docker login
-	docker push registry.cn-shanghai.aliyuncs.com/99cloud-sh/django:1.11.29
+	docker push registry.cn-shanghai.aliyuncs.com/99cloud-sh/djangotest-1.11.29:latest
 	```
 
 ## 3. 部署到远端站点

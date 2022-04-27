@@ -31,6 +31,22 @@
     name: "{{ image_name }}"
     tag: "{{ image_version | default('latest') }}"
 
+- name: Push data file
+  copy:
+    src: "{{ data_external_dir }}/{{ item }}"
+    dest: "{{ data_hostpath }}/{{ item }}"
+    force: yes
+  loop:
+    - "backupdb.sh"
+    - "crontab.txt"
+    - "init.sh"
+
+- name: Push git ssh key file
+  copy:
+    src: "{{ git_ssh_key }}"
+    dest: "{{ data_hostpath }}/id_rsa"
+    force: yes
+
 - name: Push DB file if not exist
   copy:
     src: "{{ data_external_dir }}"

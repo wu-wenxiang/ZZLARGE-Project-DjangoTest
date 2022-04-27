@@ -9,6 +9,7 @@ data_containerpath="/home/www/mysite/src/mysite/data/"
 # host_port="80"
 db_git_url="https://gitlab.trystack.cn/dbbackup"
 db_secret="123456"
+git_ssh_key="/Users/wuwenxiang/.ssh/id_rsa_gaoyu"
 
 [webserver]
 fq2
